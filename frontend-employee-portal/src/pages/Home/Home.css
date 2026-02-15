@@ -1,0 +1,48 @@
+.home-wrapper {
+  display: flex;
+  gap: 30px;
+  padding: 50px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Left panel */
+.home-left {
+  flex: 3;
+  background: #fefefe;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+}
+
+.home-left h1 {
+  margin-bottom: 15px;
+  color: #333;
+}
+
+.home-left p {
+  color: #555;
+}
+
+/* Right panel */
+.home-right {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.home-right button {
+  padding: 15px 25px;
+  background: #007bff;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.home-right button:hover {
+  background: #0056b3;
+}
