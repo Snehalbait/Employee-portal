@@ -4,9 +4,10 @@ const jwt = require('jsonwebtoken');
 
 const login = async (req, res) => {
     try {
-        const { EmployeeId, PasswordHash } = req.body;
+        const { employeeId, password } = req.body;
+console.log(employeeId,"employeeId",password);
 
-        const result = await employeeService.loginEmployee(EmployeeId, PasswordHash);
+        const result = await employeeService.loginEmployee(employeeId, password);
 
         if (result.Status === 'FAIL') {
             return errorResponse(res, result.Message, 401);

@@ -8,10 +8,9 @@ const Home = () => {
   const navigate = useNavigate();
 
   const handleAddEmployee = () => {
-    navigate("/add-employee");
+      window.location.href = "/add-employee"; // browser redirect
   }; 
-console.log("ehldldlld");
-alert("hello")
+  
   return (
     <div className="home-wrapper">
       <div className="home-left">

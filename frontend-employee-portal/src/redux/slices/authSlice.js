@@ -1,23 +1,38 @@
 import { createSlice } from "@reduxjs/toolkit";
+const initialState = {
+  userDetails: null,                       // employee object in memory only
+  GetToken: null, // JWT token
+  isLoggedIn: false,     // derived from token
+};
 
-const authSlice = createSlice({
+const AuthSlice = createSlice({
   name: "auth",
-  initialState: {
-    user: null,
-    token: localStorage.getItem("token") || null
-  },
+  initialState,
   reducers: {
-    loginSuccess: (state, action) => {
-      state.user = action.payload;
-      state.token = localStorage.getItem("token");
-    },
-    logout: (state) => {
-      state.user = null;
-      state.token = null;
-      localStorage.removeItem("token");
-    }
-  }
-});
+    setUserDetails: (state, { payload }) => { 
+      console.log(payload,"payload");
+      debugger
+      state.userDetails = payload;
+      state.isLoggedIn = true;
+            debugger
 
-export const { loginSuccess, logout } = authSlice.actions;
-export default authSlice.reducer;
+    },
+
+    // Save JWT token
+    setGetToken: (state, { payload }) => {
+      state.GetToken = payload;
+      localStorage.setItem("token", payload);
+      state.isLoggedIn = true;
+    },
+
+    // Logout
+    logout: (state) => {
+      state.userDetails = null;
+      state.GetToken = null;
+      state.isLoggedIn = false;
+      localStorage.removeItem("token");
+    },
+  },
+});
+export const { setUserDetails, setGetToken, logout } = AuthSlice.actions;
+export default AuthSlice.reducer;

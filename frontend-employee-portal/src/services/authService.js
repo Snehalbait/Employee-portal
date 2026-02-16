@@ -1,22 +1,18 @@
+// import API from "./api"; // the axios instance you shared before
 import axios from "axios";
 
+// Create Axios instance
 const API = axios.create({
-  baseURL: "http://localhost:5000/api/employees/"
+  baseURL: "http://localhost:5000/api/employees", // your backend base URL
+  // timeout: 5000, // optional: set request timeout
 });
-
-// Attach token automatically
-API.interceptors.request.use((config) => {
-  const token = localStorage.getItem("token");
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
+export const loginUser = async (data) => {
+  try {
+    const response = await API.post("/login", data); 
+    console.log(response,"response");
+    debugger
+    return response.data; 
+  } catch (err) {
+    throw err.response?.data || { message: "Login failed" };
   }
-  return config;
-});
-
-export const loginUser = (data) => { 
-    console.log(data,"data");
-    
-  return API.post("/login", data);
 };
-
-export default API;
