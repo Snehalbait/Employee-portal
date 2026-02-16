@@ -9,8 +9,9 @@ const Home = () => {
 
   const handleAddEmployee = () => {
     navigate("/add-employee");
-  };
-
+  }; 
+console.log("ehldldlld");
+alert("hello")
   return (
     <div className="home-wrapper">
       <div className="home-left">

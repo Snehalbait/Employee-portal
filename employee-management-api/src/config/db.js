@@ -1,21 +1,21 @@
 const sql = require('mssql');
 
 const config = {
-    server: 'localhost',
-    database: 'EmployeeDB',
-    port: 1433,
-    user: 'apiuser',
-    password: 'Password@123',
+  server: '(localdb)\\MSSQLLocalDB',
+  database: 'YourDatabaseName',
+  options: {
+    trustServerCertificate: true
+  },
+  authentication: {
+    type: 'ntlm',
     options: {
-        trustServerCertificate: true
+      domain: '',
+      userName: '',
+      password: ''
     }
+  }
 };
 
-
-const pool = new sql.ConnectionPool(config);
-
-pool.connect()
-    .then(() => console.log("✅ Connected to SQL Server"))
-    .catch(err => console.error("❌ DB Connection Failed:", err));
-
-module.exports = { sql, pool };
+sql.connect(config)
+  .then(() => console.log('Connected'))
+  .catch(err => console.log(err));

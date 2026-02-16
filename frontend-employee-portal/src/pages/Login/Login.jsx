@@ -15,7 +15,6 @@ const Login = () => {
   const handleLogin = (e) => {
     e.preventDefault();
 
-    // Dummy login
     if (userid === "admin" && password === "1234") {
       dispatch(loginSuccess({ userid }));
       navigate("/home");
