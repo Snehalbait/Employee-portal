@@ -38,6 +38,26 @@
   background: #218838;
 }
 
+.back-icon {
+  margin-top: 20px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid #ddd;
+  background: #f5f5f5;
+  color: #333;
+  font-size: 20px;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.back-icon:hover {
+  background: #eee;
+  border-color: #ccc;
+}
+
 .add-employee-wrapper .error {
   color: red;
   font-size: 13px;

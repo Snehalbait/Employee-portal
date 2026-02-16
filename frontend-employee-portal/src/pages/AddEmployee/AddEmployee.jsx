@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { addEmployee } from "../../services/authService";
 import "./AddEmployee.css";
 
 const AddEmployee = () => {
@@ -8,33 +10,56 @@ const AddEmployee = () => {
   const [mobile, setMobile] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
+  const currentUser = useSelector((state) => state.auth.userDetails);
 
-  const handleSave = (e) => {
+  const handleSave = async (e) => {
     e.preventDefault();
+    setError("");
 
-    // Simple frontend validation
     if (!/^\d{10}$/.test(mobile)) {
       setError("Mobile number must be 10 digits");
       return;
     }
 
-    // Payload to send to backend
+    // Basic password validation: min 8 chars, at least 1 letter and 1 number
+    const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d).{8,}$/;
+    if (!passwordRegex.test(password)) {
+      setError("Password must be at least 8 characters and include letters and numbers");
+      return;
+    }
+
     const employeeData = {
       FullName: fullName,
       Email: email,
       MobileNumber: mobile,
-      PasswordHash: password // send raw password; backend should hash it
+      PasswordHash: password,
+      Role: "EMPLOYEE",
+      CreatedBy: currentUser?.EmployeeId,
     };
 
-    console.log("Employee Data:", employeeData);
+    try {
+      setLoading(true);
+      const result = await addEmployee(employeeData);
 
-    // TODO: Call API here (axios/fetch)
-    alert("Employee added successfully!");
-
-    // Reset form or navigate
-    navigate("/home");
+      if (result.success && result.data?.Status === "SUCCESS") {
+        const newId = result.data.EmployeeId || result.data.employeeId || result.data.id;
+        if (newId) {
+          alert(`Employee added successfully! New Employee ID: ${newId}`);
+        } else {
+          alert("Employee added successfully!");
+        }
+        navigate("/home");
+      } else {
+        setError(result.message || "Failed to add employee");
+      }
+    } catch (err) {
+      setError(err.message || "Failed to add employee");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -70,10 +95,21 @@ const AddEmployee = () => {
           onChange={(e) => setPassword(e.target.value)}
           required
         />
-        <button type="submit" disabled={!fullName || !email || !mobile || !password}>
-          Save Employee
+        <button
+          type="submit"
+          disabled={loading || !fullName || !email || !mobile || !password}
+        >
+          {loading ? "Saving..." : "Save Employee"}
         </button>
       </form>
+      <button
+        type="button"
+        className="back-icon"
+        onClick={() => navigate("/home")}
+        aria-label="Back to Home"
+      >
+        ←
+      </button>
     </div>
   );
 };

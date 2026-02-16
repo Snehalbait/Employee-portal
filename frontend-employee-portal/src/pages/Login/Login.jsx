@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { setUserDetails, setGetToken  } from "../../redux/slices/authSlice";
-import { loginUser } from "../../services/authService"; // <-- import API call
+import { setUserDetails, setGetToken } from "../../redux/slices/authSlice";
+import { loginUser } from "../../services/authService";
 import "./Login.css";
 
 const Login = () => {
@@ -12,34 +12,27 @@ const Login = () => {
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
-const user = useSelector(state => state.auth.userDetails);
-console.log(user,"useruser");
 
-const handleLogin = async (e) => {
-  e.preventDefault();
-  setError("");
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    setError("");
+    try {
+      const data = { employeeId, password };
+      const result = await loginUser(data);
 
-  try {
-    const data = { employeeId, password };
-    const result = await loginUser(data);
+      console.log("Login API result:", result);
 
-    console.log("Login API result:", result); 
-    
-    if (result.success && result.data && result.data.employee.Status === "SUCCESS") {
-      // localStorage.setItem("token", result.data.token);
-      dispatch(setUserDetails(result.data.employee)); 
-      dispatch(setGetToken(result.data.token));  
-      console.log("Navigating to home...");
-      window.location.href = "/home"; // browser redirect
-    } else {
-      alert(result.message || "Invalid User ID or Password");
+      if (result.success && result.data && result.data.employee.Status === "SUCCESS") {
+        dispatch(setUserDetails(result.data.employee));
+        dispatch(setGetToken(result.data.token));
+        navigate("/home");
+      } else {
+        alert(result.message || "Invalid User ID or Password");
+      }
+    } catch (err) {
+      alert(err.message || "Invalid User ID or Password");
     }
-  } catch (err) {
-    alert(err.message || "Invalid User ID or Password");
-  }
-};
-
-
+  };
 
   return (
     <div className="login-wrapper">

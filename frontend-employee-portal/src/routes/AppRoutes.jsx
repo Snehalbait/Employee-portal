@@ -5,10 +5,26 @@ import Login from "../pages/Login/Login";
 import Home from "../pages/Home/Home";
 import AddEmployee from "../pages/AddEmployee/AddEmployee";
 
-// PrivateRoute component to protect routes
+// PrivateRoute: checks only login
 const PrivateRoute = ({ children }) => {
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
   return isLoggedIn ? children : <Navigate to="/" />;
+};
+
+// HrRoute: checks login + HR role from API response
+const HrRoute = ({ children }) => {
+  const { isLoggedIn, userDetails } = useSelector((state) => state.auth);
+
+  if (!isLoggedIn) {
+    return <Navigate to="/" />;
+  }
+
+  if (userDetails?.Role !== "HR") {
+    // Logged in but not HR – send back to home
+    return <Navigate to="/home" />;
+  }
+
+  return children;
 };
 
 const AppRoutes = () => {
@@ -28,12 +44,13 @@ const AppRoutes = () => {
           }
         />
 
+        {/* HR-only route, based on Role flag from login API */}
         <Route
           path="/add-employee"
           element={
-            <PrivateRoute>
+            <HrRoute>
               <AddEmployee />
-            </PrivateRoute>
+            </HrRoute>
           }
         />
 
