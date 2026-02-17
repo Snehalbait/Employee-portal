@@ -23,11 +23,11 @@ const config = {
 const poolPromise = new sql.ConnectionPool(config)
   .connect()
   .then(pool => {
-    console.log('✅ Connected to SQL Server pool!');
+    console.log('Connected to SQL Server pool!');
     return pool;
   })
   .catch(err => {
-    console.error('❌ DB Connection Failed:', err);
+    console.error('DB Connection Failed:', err);
     process.exit(1);
   });
 
